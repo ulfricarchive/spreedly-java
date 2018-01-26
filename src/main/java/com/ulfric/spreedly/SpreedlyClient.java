@@ -1,8 +1,6 @@
 package com.ulfric.spreedly;
 
 import java.io.IOException;
-import java.util.Currency;
-import java.util.Locale;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -12,8 +10,6 @@ import com.ulfric.spreedly.model.gateways.CreateGatewayResponse;
 import com.ulfric.spreedly.model.gateways.GatewayOptionsResponse;
 import com.ulfric.spreedly.model.gateways.purchase.PurchaseRequest;
 import com.ulfric.spreedly.model.gateways.purchase.PurchaseResponse;
-import com.ulfric.spreedly.model.gateways.purchase.Transaction;
-import com.ulfric.spreedly.model.payment.card.PaymentCard;
 import com.ulfric.spreedly.okhttp.BasicAuthenticator;
 import com.ulfric.spreedly.okhttp.Parameters;
 
@@ -27,28 +23,6 @@ import okhttp3.Response;
 public class SpreedlyClient {
 
 	private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-	public static void main(String[] args) {
-		SpreedlyClient client = SpreedlyClient.builder().environmentKey("UHOe0rvesXyr37oUHYUJmqAJf17")
-				.secret("MeboXprUDpg4us2Uil78SBXQiQG828FEmiIv4ZwpYDDOuG0j1CsSAgy7d6VWJ3A3").build();
-		PurchaseRequest request = new PurchaseRequest();
-		request.setGatewayToken("TTAq5vAHgClfYJAnKnAoQnx0aWJ");
-		Transaction transaction = new Transaction();
-		transaction.setAmount(100L);
-		transaction.setCurrency(Currency.getInstance(Locale.US));
-		transaction.setDescription("Some payment desc");
-		transaction.setEmail("test@test.com");
-		transaction.setRetain(false);
-		PaymentCard card = new PaymentCard();
-		card.setCardNumber("4111111111111111");
-		card.setCvv("123");
-		card.setFullName("John Doe");
-		card.setMonth("01");
-		card.setYear("2020");
-		transaction.setCard(card);
-		request.setTransaction(transaction);
-		System.out.println(client.purchase(request).toJson());
-	}
 
 	public static Builder builder() {
 		return new Builder();
