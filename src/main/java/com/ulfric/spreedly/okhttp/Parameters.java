@@ -1,4 +1,4 @@
-package com.ulfric.spreedly;
+package com.ulfric.spreedly.okhttp;
 
 import java.util.HashMap;
 

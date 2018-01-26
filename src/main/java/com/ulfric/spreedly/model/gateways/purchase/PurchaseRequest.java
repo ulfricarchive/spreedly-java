@@ -1,12 +1,11 @@
 package com.ulfric.spreedly.model.gateways.purchase;
 
-import com.google.gson.annotations.SerializedName;
 import com.ulfric.spreedly.model.Request;
 
 public class PurchaseRequest extends Request {
 
-	@SerializedName("gateway_token")
-	private String gatewayToken;
+	private transient String gatewayToken;
+	private Transaction transaction;
 
 	public String getGatewayToken() {
 		return gatewayToken;
@@ -14,6 +13,14 @@ public class PurchaseRequest extends Request {
 
 	public void setGatewayToken(String gatewayToken) {
 		this.gatewayToken = gatewayToken;
+	}
+
+	public Transaction getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
 	}
 
 }

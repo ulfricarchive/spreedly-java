@@ -12,9 +12,28 @@ import com.ulfric.spreedly.model.payment.card.CardType;
 public class Gateway extends Bean {
 
 	private String name;
+	private String token;
 	private Set<Operation> characteristics;
 	private Set<String> regions; // TODO use a Region enum
 	private String homepage;
+	private String description;
+	private Boolean redacted;
+
+	public Boolean getRedacted() {
+		return redacted;
+	}
+
+	public void setRedacted(Boolean redacted) {
+		this.redacted = redacted;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	@SerializedName("gateway_type")
 	private String gatewayType;
@@ -37,12 +56,26 @@ public class Gateway extends Bean {
 	@SerializedName("company_name")
 	private String companyName;
 
+	@SerializedName("created_at")
+	private String createdAt; // TODO use Instant
+
+	@SerializedName("updated_at")
+	private String updatedAt; // TODO use Instant
+
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public Set<Operation> getCharacteristics() {

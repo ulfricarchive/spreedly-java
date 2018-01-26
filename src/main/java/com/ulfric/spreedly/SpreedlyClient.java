@@ -5,9 +5,13 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.ulfric.spreedly.exception.SpreedlyRuntimeException;
+import com.ulfric.spreedly.model.gateways.CreateGatewayRequest;
+import com.ulfric.spreedly.model.gateways.CreateGatewayResponse;
 import com.ulfric.spreedly.model.gateways.GatewayOptionsResponse;
 import com.ulfric.spreedly.model.gateways.purchase.PurchaseRequest;
 import com.ulfric.spreedly.model.gateways.purchase.PurchaseResponse;
+import com.ulfric.spreedly.okhttp.BasicAuthenticator;
+import com.ulfric.spreedly.okhttp.Parameters;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -36,9 +40,12 @@ public class SpreedlyClient {
 
 		public SpreedlyClient build() {
 			OkHttpClient okHttp = this.okHttp == null ? new OkHttpClient() : this.okHttp;
+			if (environmentKey != null || secret != null) {
+				okHttp = okHttp.newBuilder().authenticator(new BasicAuthenticator(environmentKey, secret)).build();
+			}
 			String version = this.version == null ? "v1" : this.version;
 			Gson gson = this.gson == null ? new Gson() : this.gson;
-			return new SpreedlyClient(okHttp, version, gson, environmentKey, secret);
+			return new SpreedlyClient(okHttp, version, gson);
 		}
 
 		public Builder okHttp(OkHttpClient okHttp) {
@@ -70,19 +77,19 @@ public class SpreedlyClient {
 	private final OkHttpClient okHttp;
 	private final Gson gson;
 	private final String version;
-	private final String environmentKey;
-	private final String secret;
 
-	private SpreedlyClient(OkHttpClient okHttp, String version, Gson gson, String environmentKey, String secret) {
+	private SpreedlyClient(OkHttpClient okHttp, String version, Gson gson) {
 		this.okHttp = okHttp;
 		this.version = version;
 		this.gson = gson;
-		this.environmentKey = environmentKey;
-		this.secret = secret;
 	}
 
 	public GatewayOptionsResponse listSupportedGateways() {
 		return get(null, "gateways_options", GatewayOptionsResponse.class);
+	}
+
+	public CreateGatewayResponse createGateway(CreateGatewayRequest request) {
+		return post(request, "gateways", null, CreateGatewayResponse.class);
 	}
 
 	public PurchaseResponse purchase(PurchaseRequest request) {
@@ -124,8 +131,7 @@ public class SpreedlyClient {
 			.scheme("https")
 			.host("core.spreedly.com")
 			.addPathSegment(version)
-			.username(environmentKey)
-			.password(secret);
+			;
 
 		if (parameters != null) {
 			for (Map.Entry<String, String> parameter : parameters.entrySet()) {
@@ -144,6 +150,7 @@ public class SpreedlyClient {
 		try {
 			Response response = okHttp.newCall(request).execute();
 			String responseBody = response.body().string();
+			//System.out.println(responseBody);
 			return gson.fromJson(responseBody, responseType);
 		} catch (IOException exception) {
 			throw new SpreedlyRuntimeException(exception);
