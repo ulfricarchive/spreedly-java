@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.ulfric.spreedly.exception.SpreedlyRuntimeException;
 import com.ulfric.spreedly.model.gateways.GatewayOptionsResponse;
+import com.ulfric.spreedly.okhttp.SimpleAuthenticator;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,15 +21,45 @@ public class SpreedlyClient {
 		private OkHttpClient okHttp;
 		private String version;
 		private Gson gson;
+		private String environmentKey;
+		private String secret;
 
 		Builder() {
 		}
 
 		public SpreedlyClient build() {
 			OkHttpClient okHttp = this.okHttp == null ? new OkHttpClient() : this.okHttp;
+			if (environmentKey != null || secret != null) {
+				okHttp = okHttp.newBuilder().authenticator(new SimpleAuthenticator(environmentKey, secret)).build();
+			}
 			String version = this.version == null ? "v1" : this.version;
 			Gson gson = this.gson == null ? new Gson() : this.gson;
 			return new SpreedlyClient(okHttp, version, gson);
+		}
+
+		public Builder okHttp(OkHttpClient okHttp) {
+			this.okHttp = okHttp;
+			return this;
+		}
+
+		public Builder version(String version) {
+			this.version = version;
+			return this;
+		}
+
+		public Builder gson(Gson gson) {
+			this.gson = gson;
+			return this;
+		}
+
+		public Builder environmentKey(String environmentKey) {
+			this.environmentKey = environmentKey;
+			return this;
+		}
+
+		public Builder secret(String secret) {
+			this.secret = secret;
+			return this;
 		}
 	}
 
@@ -74,7 +105,6 @@ public class SpreedlyClient {
 		try {
 			Response response = okHttp.newCall(request).execute();
 			String responseBody = response.body().string();
-			System.out.println(responseBody);
 			return gson.fromJson(responseBody, responseType);
 		} catch (IOException exception) {
 			throw new SpreedlyRuntimeException(exception);
