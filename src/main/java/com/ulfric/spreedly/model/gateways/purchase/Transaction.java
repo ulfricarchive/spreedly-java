@@ -1,5 +1,6 @@
 package com.ulfric.spreedly.model.gateways.purchase;
 
+import java.math.BigInteger;
 import java.util.Currency;
 import java.util.Set;
 
@@ -57,7 +58,7 @@ public class Transaction extends Bean {
 	@SerializedName("gateway_type")
 	private String gatewayType; // TODO gatewayType enum
 
-	private Long amount;
+	private BigInteger amount;
 	private String description;
 	private String email;
 	private String message;
@@ -193,11 +194,11 @@ public class Transaction extends Bean {
 		this.gatewayType = gatewayType;
 	}
 
-	public Long getAmount() {
+	public BigInteger getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Long amount) {
+	public void setAmount(BigInteger amount) {
 		this.amount = amount;
 	}
 
