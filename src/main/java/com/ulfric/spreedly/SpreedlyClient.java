@@ -10,6 +10,7 @@ import com.ulfric.spreedly.model.gateways.CreateGatewayResponse;
 import com.ulfric.spreedly.model.gateways.GatewayOptionsResponse;
 import com.ulfric.spreedly.model.gateways.purchase.PurchaseRequest;
 import com.ulfric.spreedly.model.gateways.purchase.PurchaseResponse;
+import com.ulfric.spreedly.model.payment.ListPaymentMethodsResponse;
 import com.ulfric.spreedly.okhttp.BasicAuthenticator;
 import com.ulfric.spreedly.okhttp.Parameters;
 
@@ -86,6 +87,10 @@ public class SpreedlyClient {
 
 	public GatewayOptionsResponse listSupportedGateways() {
 		return get(null, "gateways_options", GatewayOptionsResponse.class);
+	}
+
+	public ListPaymentMethodsResponse listPaymentMethods() {
+		return get(null, "payment_methods", ListPaymentMethodsResponse.class);
 	}
 
 	public CreateGatewayResponse createGateway(CreateGatewayRequest request) {
