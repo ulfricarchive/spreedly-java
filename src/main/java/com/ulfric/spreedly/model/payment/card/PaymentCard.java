@@ -1,8 +1,9 @@
 package com.ulfric.spreedly.model.payment.card;
 
 import com.google.gson.annotations.SerializedName;
+import com.ulfric.spreedly.model.Bean;
 
-public class PaymentCard {
+public class PaymentCard extends Bean {
 
 	private String month;
 	private String year;
